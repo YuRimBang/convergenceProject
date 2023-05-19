@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.MenuMapper">
+    <resultMap id="Menu" type="persistence.dto.MenuDTO">
+        <result property="MenuName" column="MenuName"/>
+        <result property="Type" column="Type"/>
+        <result property="OrderQuantity" column="OrderQuantity"/>
+        <result property="Price" column="Price"/>
+        <result property="MenuDescription" column="MenuDescription"/>
+        <result property="StoreID" column="StoreID"/>
+        <result property="RemainingSale" column="RemainingSale"/>
+        <result property="Discount" column="Discount"/>
+        <collection property="option" resultMap="Menuoption"/>
+    </resultMap>
+    <resultMap id="Menuoption" type="persistence.dto.MenuoptionDTO">
+        <result property="StoreID" column="StoreID"/>
+        <result property="MenuName" column="MenuName"/>
+        <result property="Options" column="Options"/>
+        <result property="price" column="price"/>
+    </resultMap>
+    <select id="findMenus" resultMap="Menu">
+        SELECT *
+        FROM Menu
+        WHERE StoreID=#{StoreID}
+    </select>
+    <select id="AllMenu" resultMap="Menu" >
+        SELECT menu.Type, menu.MenuName, menu.Price, o.Options, menu.MenuDescription, menu.OrderQuantity, menu.RemainingSale, menu.Discount
+        FROM Menu as menu LEFT JOIN Menuoption as o
+                                    ON menu.StoreID = o.StoreID
+        WHERE menu.StoreID = #{StoreID}
+    </select>
+    <select id="findPrice" resultMap="Menu">
+        SELECT *
+        FROM Menu
+        WHERE StoreID=#{StoreID} AND MenuName = #{MenuName}
+    </select>
+    <insert id="insertMenuAll" >
+        INSERT INTO Menu(MenuName, OrderQuantity, Price, MenuDescription, StoreID, RemainingSale, Discount,Type)
+        VALUES (#{MenuName}, #{OrderQuantity}, #{Price}, #{MenuDescription}, #{StoreID}, #{RemainingSale}, #{Discount},#{Type})
+    </insert>
+    <update id="updataMenu" parameterType="persistence.dto.MenuDTO">
+        UPDATE Menu
+        <set>
+            <if test="NewMenuName != ''"> Menu.MenuName = #{NewMenuName},</if>
+            <if test="Price != -1"> Menu.Price = #{Price},</if>
+            <if test="NewMenuName != '' and Price != -1"> Menu.MenuName = #{NewMenuName}, Menu.Price = #{Price} ,</if>
+        </set>
+        WHERE Menu.StoreID = #{StoreID} AND Menu.MenuName = #{beforeMenuName}
+    </update>
+    <select id="findMenuName" resultMap="Menu">
+        SELECT MenuName
+        FROM Menu
+        WHERE MenuNAme = #{MenuName} AND StoreID=#{StoreID}
+    </select>
+    <select id="findStoreID" resultMap="Menu">
+        SELECT *
+        FROM Menu
+        WHERE StoreName=#{StoreName}
+    </select>
+    <update id="saleAndOrderQuantity" parameterType="persistence.dto.MenuDTO">
+        UPDATE menu
+        SET menu.RemainingSale = menu.RemainingSale-1, menu.OrderQuantity = menu.OrderQuantity + 1
+        WHERE menu.StoreID = #{StoreID} AND menu.MenuName = #{Menu}
+    </update>
+    <select id="findMenu" resultMap="Menu">
+        SELECT *
+        FROM menu
+        WHERE menu.ClientID = #{ClientID} AND menu.StoreID = #{StoreID}
+    </select>
+    <select id="findTypeMenu" resultMap="Menu">
+        SELECT *
+        FROM menu
+        WHERE Type = #{Type}
+    </select>
+    <update id="remiainingdown" parameterType="persistence.dto.MenuoptionDTO">
+        UPDATE Menu
+        SET RemainingSale=RemainingSale - 1
+        WHERE StoreID = #{StoreID} AND MenuName=#{MenuName}
+    </update>
+    <update id="updateOrderQuentity" parameterType="persistence.dto.MenuoptionDTO">
+        UPDATE Menu
+        SET OrderQuantity=OrderQuantity + 1
+        WHERE StoreID=#{StoreID} AND MenuName=#{MenuName}
+    </update>
+    <update id="updateDiscount" parameterType="persistence.dto.MenuoptionDTO">
+        UPDATE Menu
+        SET Discount=#{Discount}
+        WHERE MenuName=#{MenuName} AND StoreID = #{StoreID}
+    </update>
+</mapper>

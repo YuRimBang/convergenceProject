@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.ReviewMapper">
+    <resultMap id="result" type="persistence.dto.ReviewDTO">
+        <result property="ClientID" column="ClientID"/>
+        <result property="StoreID" column="StoreID"/>
+        <result property="MenuName" column="MenuName"/>
+        <result property="Review" column="Review"/>
+        <result property="Grade" column="Grade"/>
+        <result property="deliveryTime" column="deliveryTime"/>
+        <result property="ownerAnswer" column="ownerAnswer"/>
+    </resultMap>
+    <select id="selectAll" resultMap="result">
+        SELECT * FROM Review
+    </select>
+    <insert id="writeReview">
+        INSERT INTO Review VALUES(#{ClientID},#{StoreID},#{MenuName},#{Review},#{Grade},#{deliveryTime},#{ownerAnswer})
+    </insert>
+    <update id="ownerAnswer" parameterType="persistence.dto.ReviewDTO">
+        UPDATE Review
+        SET ownerAnswer=#{ownerAnswer}
+        WHERE StoreID=#{StoreID} AND deliveryTime=#{deliveryTime}
+    </update>
+    <select id="canOwnerAnswer" resultMap="result">
+        SELECT *
+        FROM Review
+        WHERE StoreID=#{StoreID}
+    </select>
+    <select id="selectClientReview" resultMap="result">
+        SELECT *
+        FROM review
+        WHERE ClientID = #{ClientID}
+        LIMIT 2
+        OFFSET #{page}
+    </select>
+    <select id="allReview" resultMap="result">
+        SELECT *
+        FROM review
+        WHERE ClientID=#{ClientID}
+    </select>
+    <select id="oneStoreReview" resultMap="result">
+        SELECT *
+        FROM review
+        WHERE StoreID=#{StoreID}
+    </select>
+</mapper>

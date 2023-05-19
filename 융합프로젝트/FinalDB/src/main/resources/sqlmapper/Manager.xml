@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.ManagerMapper">
+    <resultMap id="result" type="persistence.dto.ManagerDTO">
+        <result property="pk" column="pk"/>
+        <result property="ManagerID" column="ManagerID"/>
+        <result property="ManagerPW" column="ManagerPW"/>
+        <result property="ManagerAge" column="ManagerAge"/>
+        <result property="ManagerName" column="ManagerName"/>
+    </resultMap>
+    <select id="selectAll" resultMap="result">
+        SELECT * FROM Manager
+    </select>
+    <select id="selectLogin" resultMap="result">
+        SELECT *
+        FROM Manager
+        WHERE ManagerID = #{ManagerID} AND ManagerPW = #{ManagerPW}
+    </select>
+
+</mapper>

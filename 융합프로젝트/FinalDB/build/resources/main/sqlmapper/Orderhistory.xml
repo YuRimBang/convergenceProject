@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.OrderhistoryMapper">
+    <resultMap id="result" type="persistence.dto.OrderhistoryDTO">
+        <result property="ClientID" column="ClientID"/>
+        <result property="DeliveryDate" column="DeliveryDate"/>
+        <result property="Menu" column="Menu"/>
+        <result property="StoreID" column="StoreID"/>
+        <result property="options" column="options"/>
+        <result property="totalPrice" column="totalPrice"/>
+        <result property="OrderState" column="OrderState"/>
+    </resultMap>
+    <select id="selectAll" resultMap="result">
+        SELECT * FROM Orderhistory
+    </select>
+    <select id="orderCheck" resultMap="result">
+        SELECT *
+        FROM orderhistory
+        WHERE DeliveryDate = #{DeliveryDate}
+    </select>
+    <select id="storeOrderCheck" resultMap="result">
+        SELECT *
+        FROM orderhistory
+        WHERE StoreID=#{StoreID} AND OrderState = "배달완료"
+    </select>
+    <select id="storeTotalMoneyCheck" resultMap="result">
+        SELECT *
+        FROM orderhistory
+        WHERE StoreID=#{StoreID} AND OrderState="배달완료" AND MenuName=#{MenuName}
+    </select>
+    <select id="writeReview" resultMap="result">
+        SELECT *
+        FROM orderhistory
+        WHERE ClientID=#{ClientID} AND OrderState=#{OrderState}
+    </select>
+    <insert id="newOrder">
+        INSERT INTO orderhistory (ClientID,DeliveryDate,Menu,StoreID,OrderState,options,totalPrice) VALUES(#{ClientID},#{DeliveryDate},#{Menu},#{StoreID},#{OrderState},#{options},#{totalPrice})
+    </insert>
+    <select id="isDeliveryStart" resultMap="result">
+        SELECT *
+        FROM orderhistory
+        WHERE ClientID = #{ClientID} AND DeliveryDate=#{DeliveryDate} AND StoreID = #{StoreID}
+    </select>
+    <select id="customerOrderCheck" resultMap="result">
+        SELECT *
+        FROM orderhistory
+        WHERE ClientID = #{ClientID}
+    </select>
+    <update id="changeOrderState" parameterType="persistence.dto.OrderhistoryDTO">
+        UPDATE orderhistory
+        SET OrderState = #{changeOrderState}
+        WHERE ClientID = #{ClientID}  AND StoreID = #{StoreID} AND OrderState =  #{OrderState}
+    </update>
+    <update id="deliveryFinish" parameterType="persistence.dto.OrderhistoryDTO">
+        UPDATE orderhistory
+        SET OrderState = #{OrderState}
+        WHERE ClientID = #{ClientID} AND OrderState = #{beforeOrderState} AND DeliveryDate=#{DeliveryDate} AND StoreID = #{StoreID}
+    </update>
+<update id="receiptComplete" parameterType="persistence.dto.OrderhistoryDTO">
+    UPDATE orderhistory
+    SET OrderState=#{OrderState}
+    WHERE ClientID=#{ClientID} AND StoreID=#{StoreID} AND OrderState="접수대기"
+</update>
+    <update id="orderCancel" parameterType="persistence.dto.OrderhistoryDTO">
+        UPDATE orderhistory
+        SET OrderState="주문취소"
+        WHERE ClientID=#{ClientID} AND StoreID=#{StoreID} AND OrderState="접수대기" AND DeliveryDate=#{DeliveryDate}
+    </update>
+    <update id="orderReject" parameterType="persistence.dto.OrderhistoryDTO">
+        UPDATE orderhistory
+        SET OrderState="접수거절"
+        WHERE ClientID=#{ClientID} AND StoreID=#{StoreID} AND OrderState="접수대기"
+    </update>
+   <select id="selectOrderWait" resultMap="result">
+        SELECT *
+        FROM orderhistory
+        WHERE StoreID = #{StoreID} AND OrderState = "접수대기"
+    </select>
+    <select id="selectOrderDelivery" resultMap="result">
+        SELECT *
+        FROM orderhistory
+        WHERE StoreID = #{StoreID} AND OrderState = "배달중"
+    </select>
+    <select id="selectCancelAndFinish" resultMap="result">
+        SELECT *
+        FROM orderhistory
+        WHERE ClientID = #{ClientID} AND (OrderState = "배달완료" OR OrderState = "주문취소")
+    </select>
+    <select id="selectDuplicateReception" resultMap="result">
+        SELECT *
+        FROM orderhistory
+        WHERE ClientID = #{ClientID} AND StoreID = #{StoreID} AND Menu = #{Manu} AND DeliveryDate = #{DeliveryDate} AND OrderState = "접수대기"
+    </select>
+    <select id="selectClientWaiting" resultMap="result">
+        SELECT *
+        FROM orderhistory
+        WHERE ClientID = #{ClientID} AND OrderState = "접수대기"
+    </select>
+    <select id="selectClientDelivery" resultMap="result">
+        SELECT *
+        FROM orderhistory
+        WHERE ClientID = #{ClientID} AND ORderState = "배달중"
+    </select>
+    <select id="selectOrderDone" resultMap="result">
+        SELECT *
+        FROM orderhistory
+        WHERE OrderState = "접수완료" AND StoreID=#{StoreID}
+    </select>
+    <update id="ReceptionDone" parameterType="persistence.dto.OrderhistoryDTO">
+        UPDATE orderhistory
+        SET OrderState = #{OrderState}
+        WHERE ClientID = #{ClientID} AND OrderState = #{beforeOrderState} AND DeliveryDate=#{DeliveryDate} AND StoreID = #{StoreID}
+    </update>
+    <select id="findStoreOrderhistory" resultMap="result">
+        SELECT *
+        FROM orderhistory
+        WHERE StoreID=#{StoreID}
+    </select>
+</mapper>

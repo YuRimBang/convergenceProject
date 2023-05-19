@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.MenuoptionMapper">
+    <resultMap id="result" type="persistence.dto.MenuoptionDTO">
+        <result property="StoreID" column="StoreID"/>
+        <result property="MenuName" column="MenuName"/>
+        <result property="Options" column="Options"/>
+        <result property="price" column="price"/>
+        <result property="OptionNum" column="OptionNum"/>
+    </resultMap>
+    <select id="selectAll" resultMap="result">
+        SELECT * FROM Menuoption
+    </select>
+    <select id="findMenu" resultMap="result">
+        SELECT *
+        FROM Menuoption
+        WHERE StoreID=#{StoreID} AND Options=#{Options}
+    </select>
+    <select id="findOptionName" resultMap="result">
+        SELECT *
+        FROM Menuoption
+        WHERE OptionNum=#{OptionNum}
+    </select>
+    <insert id="insertMenuoption">
+        INSERT INTO MenuOption(MenuName,StoreID, Options,price) VALUES(#{MenuName},#{StoreID}, #{Options},#{price})
+    </insert>
+    <select id="storeOptions" resultMap="result">
+        SELECT *
+        FROM MenuOption
+        WHERE StoreID=#{StoreID}
+    </select>
+</mapper>

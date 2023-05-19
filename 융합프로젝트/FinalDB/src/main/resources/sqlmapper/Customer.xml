@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.CustomerMapper">
+    <resultMap id="result" type="persistence.dto.CustomerDTO">
+        <result property="ClientAge" column="ClientAge"/>
+        <result property="ClientID" column="ClientID"/>
+        <result property="ClientName" column="ClientName"/>
+        <result property="PhoneNumber" column="PhoneNumber"/>
+        <result property="Adress" column="Adress"/>
+        <result property="ClientPW" column="ClientPW"/>
+    </resultMap>
+    <select id="selectAll" resultMap="result">
+        SELECT * FROM Customer
+    </select>
+
+    <select id="customerInformation" resultMap="result">
+            SELECT *
+            FROM Customer
+            WHERE ClientID=#{ClientID}
+    </select>
+
+    <insert id="signUp">
+        INSERT INTO Customer(ClientAge,ClientID,ClientPW,ClientName,PhoneNumber,Adress) VALUES(#{ClientAge},#{ClientID}, #{ClientPW},#{ClientName},#{PhoneNumber},#{Adress})
+    </insert>
+    <update id="changePW" parameterType="persistence.dto.CustomerDTO">
+        UPDATE Customer
+        SET ClientPW=#{ClientPW}
+        WHERE ClientID = #{ClientID}
+    </update>
+    <update id="changePhoneNumber" parameterType="persistence.dto.CustomerDTO">
+        UPDATE Customer
+        SET PhoneNumber=#{PhoneNumber}
+        WHERE ClientID = #{ClientID}
+    </update>
+    <update id="changeAdress" parameterType="persistence.dto.CustomerDTO">
+        UPDATE Customer
+        SET Adress=#{Adress}
+        WHERE ClientID = #{ClientID}
+    </update>
+    <select id="selectLogin" resultMap="result">
+        SELECT *
+        FROM Customer
+        WHERE ClientID = #{ClientID} AND ClientPW = #{ClientPW}
+    </select>
+</mapper>

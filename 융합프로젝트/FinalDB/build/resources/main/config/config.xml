@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+    <typeAliases>
+        <typeAlias alias="OwnerDAO" type="persistence.dto.OwnerDTO"/>
+        <typeAlias alias="CustomerDAO" type="persistence.dto.CustomerDTO"/>
+        <typeAlias alias="ManagerDAO" type="persistence.dto.ManagerDTO"/>
+        <typeAlias alias="StoreDAO" type="persistence.dto.StoreDTO"/>
+        <typeAlias alias="MenuDAO" type="persistence.dto.MenuDTO"/>
+        <typeAlias alias="MenuoptionDAO" type="persistence.dto.MenuoptionDTO"/>
+        <typeAlias alias="OrderhistoryDAO" type="persistence.dto.OrderhistoryDTO"/>
+        <typeAlias alias="ReviewDAO" type="persistence.dto.ReviewDTO"/>
+    </typeAliases>
+
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <!--  connecting to Local MySql -->
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost/mydb?characterEncoding=utf8&amp;serverTimezone=UTC&amp;useSSL=false"/>
+                <property name="username" value="root"/>
+                <property name="password" value="135246"/>
+            </dataSource>
+
+        </environment>
+    </environments>
+    <mappers>
+        <mapper resource="sqlmapper/Owner.xml"/>
+        <mapper resource="sqlmapper/Customer.xml"/>
+        <mapper resource="sqlmapper/Manager.xml"/>
+        <mapper resource="sqlmapper/Store.xml"/>
+        <mapper resource="sqlmapper/Menu.xml"/>
+        <mapper resource="sqlmapper/Menuoption.xml"/>
+        <mapper resource="sqlmapper/Orderhistory.xml"/>
+        <mapper resource="sqlmapper/Review.xml"/>
+    </mappers>
+
+</configuration>

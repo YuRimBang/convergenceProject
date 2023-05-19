@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.OwnerMapper">
+    <resultMap id="result" type="persistence.dto.OwnerDTO">
+        <result property="OwnerName" column="OwnerName"/>
+        <result property="PhoneNumber" column="PhoneNumber"/>
+        <result property="OwnerID" column="OwnerID"/>
+        <result property="OwnerPW" column="OwnerPW"/>
+    </resultMap>
+    <select id="selectAll" resultMap="result">
+        SELECT * FROM Owner
+    </select>
+    <select id="StoreCheck" resultMap="result">
+        SELECT * FROM Owner WHERE Owner.OwnerID = #{OwnerID}
+    </select>
+    <insert id="ownerRegistration">
+        INSERT INTO Owner (OwnerName,PhoneNumber,OwnerID,OwnerPW) VALUES(#{OwnerName},#{PhoneNumber},#{OwnerID},#{OwnerPW})
+    </insert>
+    <select id="selectLogin" resultMap="result">
+        SELECT *
+        FROM Owner
+        WHERE OwnerID = #{OwnerID} AND OwnerPW = #{OwnerPW}
+    </select>
+</mapper>

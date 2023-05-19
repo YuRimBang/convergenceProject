@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.StoreMapper">
+    <resultMap id="store" type="persistence.dto.StoreDTO">
+        <result property="StoreID" column="StoreID"/>
+        <result property="StorePW" column="StorePW"/>
+        <result property="StoreName" column="StoreName"/>
+        <result property="Adress" column="Adress"/>
+        <result property="StorePhoneNumber" column="StorePhoneNumber"/>
+        <result property="OwnerID" column="OwnerID"/>
+        <result property="Introduce" column="Introduce"/>
+        <result property="Operatingtime" column="Operatingtime"/>
+    </resultMap>
+
+    <select id="selectAll" resultMap="store">
+        SELECT * FROM Store
+    </select>
+    <select id="selectOne" resultMap="store">
+        SELECT *
+        FROM Store
+        WHERE StoreID = #{StoreID}
+    </select>
+    <select id="login" resultMap="store">
+        SELECT *
+        FROM Store
+        WHERE StoreID=#{StoreID} AND StorePW=#{StorePW}
+    </select>
+    <insert id="storeRegistration">
+        INSERT INTO Store (StoreID,StoreName, Adress, StorePhoneNumber, OwnerID, Introduce,storePW,Operatingtime) VALUES(#{StoreID}, #{StoreName},#{Adress}, #{StorePhoneNumber},#{OwnerID},#{Introduce},#{storePW},#{Operatingtime})
+    </insert>
+    <update id="changeOperatingTime" parameterType="persistence.dto.StoreDTO">
+        UPDATE Store
+        SET Operatingtime=#{Operatingtime}
+        WHERE StoreID=#{StoreID}
+    </update>
+
+    <select id="findStoreID"  resultMap="store">
+        SELECT *
+        FROM store
+        WHERE StoreName = #{StoreName}
+    </select>
+    <select id="findStoreName" resultMap="store">
+        SELECT *
+        FROM store
+        WHERE StoreID = #{StoreID}
+    </select>
+</mapper>
